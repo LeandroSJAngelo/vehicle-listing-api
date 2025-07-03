@@ -15,7 +15,7 @@ export type LoginUserOutput = {
 }
 
 @Injectable()
-export abstract class LoginUserUsecase
+export class LoginUserUsecase
   implements Usecase<LoginUserInput, LoginUserOutput> {
 
     public constructor(

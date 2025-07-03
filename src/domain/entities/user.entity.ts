@@ -9,6 +9,15 @@ type UserCreate = {
   password: string;
 }
 
+export type UserWithDto = {
+  id: string;
+  email: string;
+  password: string;
+  createdAt: Date;
+  updatedAt: Date;
+  deletedAt: Date | null;
+}
+
 export class User extends Entity {
   private constructor(
     id: string,
@@ -16,8 +25,9 @@ export class User extends Entity {
     private password: Password,
     createdAt: Date,
     updateAt: Date,
+    deletedAt: Date | null,
   ) {
-    super(id, createdAt, updateAt);
+    super(id, createdAt, updateAt, deletedAt);
     this.validate();
   }
 
@@ -27,7 +37,13 @@ export class User extends Entity {
     const emailVO = Email.create(email);
     const passwordVO = Password.create(password);
 
-    return new User(id, emailVO, passwordVO, now, now);
+    return new User(id, emailVO, passwordVO, now, now, null);
+  }
+
+  public static with({ id, email, password, createdAt, updatedAt, deletedAt }: UserWithDto): User {
+    const emailVO = Email.create(email);
+    const passwordVO = Password.create(password);
+    return new User(id, emailVO, passwordVO, createdAt, updatedAt, deletedAt);
   }
 
   protected validate(): void {
